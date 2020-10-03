@@ -1,0 +1,6 @@
+Installation
+============
+
+Inside weatherapp run::
+
+    python setup.py develop
