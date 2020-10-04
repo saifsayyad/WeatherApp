@@ -27,11 +27,12 @@ class YahooApiPattern(GwBasePattern):
             * woeid -> woeid number
 
         """
-        if not all([k in ['location', 'u', 'lat', 'lon', 'format', 'woeid'] for k in kwargs.keys()]):
-            self.log.error("Wrong Query!!")
-            self.log.info("Will be using default info!!")
-        else:
-            self.query.update(kwargs)
+        query_params = {}
+        for k, v in kwargs.items():
+            if v != '':
+                query_params[k] = v
+
+        self.query.update(query_params)
 
     def get_oauth_header(self):
         """
