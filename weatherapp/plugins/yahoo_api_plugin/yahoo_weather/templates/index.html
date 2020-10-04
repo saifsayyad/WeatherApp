@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WeatherApp</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+          var weatherData = {{ data | tojson | safe }};
+
+
+
+    </script>
+    <link rel="stylesheet" href="{{ url_for('weather.static', filename = 'css/formstyle.css') }}">
+    <script type="text/javascript" src="{{ url_for('weather.static', filename = 'js/chart.js') }}"></script>
+</head>
+<body>
+<div class="grid-container">
+    <div class="forecast" id="chart_div"></div>
+    <div class="container">
+        <form action="{{ url_for('basic.__weather_view') }}" method="post">
+            <h1>Search params</h1>
+            <div class="form-group">
+                <select name="unit">
+                    <option>C</option>
+                    <option>F</option>
+                </select>
+                <label for="select" class="control-label">Unit</label><i class="bar"></i>
+            </div>
+            <div class="form-group">
+                <input type="text" name="loc"/>
+                <label for="loc" class="control-label">Location Name eg. Nashik</label><i class="bar"></i>
+            </div>
+            <div class="form-group">
+                <input type="text" name="woeid"/>
+                <label for="woeid" class="control-label">Woeid</label><i class="bar"></i>
+            </div>
+            <div class="form-group">
+                <input type="text" name="lat"/>
+                <label for="lat" class="control-label">Latitude</label><i class="bar"></i>
+            </div>
+            <div class="form-group">
+                <input type="text" name="lon"/>
+                <label for="lon" class="control-label">Longitude</label><i class="bar"></i>
+            </div>
+
+            <div class="button-container">
+                <!--            <input type="submit" value="Submit" class="button">-->
+                <button type="submit" class="button"><span>Submit</span></button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

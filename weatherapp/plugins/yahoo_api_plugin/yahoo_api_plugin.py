@@ -3,6 +3,7 @@ import os
 from groundwork_web.patterns import GwWebPattern
 from groundwork.patterns import GwCommandsPattern
 from weatherapp.patterns.YahooApiPattern.YahooApiPattern import YahooApiPattern, YahooApiException
+from flask import request
 
 
 class YahooApiPlugin(GwWebPattern, GwCommandsPattern, YahooApiPattern):
@@ -28,19 +29,28 @@ class YahooApiPlugin(GwWebPattern, GwCommandsPattern, YahooApiPattern):
                                    description="Context for Weather WUI")
 
     def __weather_view(self):
+        # print(dir(request))
+        # print(request.method)
+        response = None
+        if request.method == 'POST':
+            query_args = {
+                "u": request.form.get('unit', None),
+                "location": request.form.get('loc', None),
+                "woeid": request.form.get('woeid', None),
+                "lat": request.form.get('lat', None),
+                "lon": request.form.get('lon', None)
+            }
+            YahooApiPattern.set_query_params(self, **query_args)
         try:
-            YahooApiPattern.set_query_params(self, location='jalgaon', u='f')
             response = YahooApiPattern.get_weathter_info(self)
         except Exception as e:
             self.log.error(str(e))
             self.log.info("Retrying!!")
 
             try:
-                YahooApiPattern.refresh_time_stamp(self)
-                YahooApiPattern.refresh_oauth_nonce(self)
                 response = YahooApiPattern.get_weathter_info(self)
             except Exception as e:
                 self.log.error(str(e))
                 response = str(e)
 
-        return response
+        return self.web.render("index.html", data=response)
